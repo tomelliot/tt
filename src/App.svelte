@@ -101,7 +101,18 @@
     function updateBasetime(clock, tz_row) {
         var new_basetime = basetime.add(tz_clocks[0][clock]-basetime.hours(),"hours");
         updateTzs(new_basetime);
-    }
+    };
+
+    function hoverCol(col_nb) {
+      // let the_dom_element = jQuery(".col_"+col_nb);
+      let class_name = ".col_"+col_nb;
+      jQuery(class_name).css("font-weight", 700);
+    };
+
+    function unHoverCol(col_nb) {
+      let class_name = ".col_"+col_nb;
+      jQuery(class_name).css("font-weight", 400);
+    };
 
     function updateTzs(new_basetime) {
         console.log("updateTzs");
@@ -168,7 +179,7 @@
     }
 
     function setDefaultViewData() {
-        let cities_to_show = ['Buenos Aires', 'Riga', 'Vancouver'];
+        let cities_to_show = ['Buenos Aires', 'Riga', 'Sydney', 'Vancouver'];
         for (var i = 0; i <= cities_to_show.length - 1; i++) {
             groups[0].city_names = groups[0].city_names.concat(cities_to_show[i]);
         }
@@ -251,23 +262,25 @@
         border: none;
         text-align: center;
         vertical-align: middle;
-        color: hsl(240,50%,20%)
     }
     .timezone_clock:hover {
         cursor: pointer;
     }
     .city_name_active {
-        border: none;
-        background: hsl(240,50%,80%);
-        color: hsl(240,50%,20%)
+        border-right-color: rgb(190,190,190);
+        border-right-style: solid;
+        border-right-width: 2px;
     }
     .city_name_inactive {
-        background: inherit;
-        color: hsl(240,50%,75%);
-        background-color: hsl(240,50%,90%);
+    border-right-color: rgb(190,190,190);
+    border-right-style: solid;
+    border-right-width: 2px;
+
+      color: rgb(190,190,190);
+      font-weight: lighter;
+      background: inherit;
     }
     .inactive_row {
-        background-color: hsl(240,50%,92%);
     }
     .city_name_inactive:hover {
         cursor: pointer;
@@ -289,10 +302,8 @@
         /*border-style: solid;*/
     }
     .city_search_row {
-        background-color: hsl(240,50%,90%);
     }
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: hsl(240,50%,20%);
         opacity: 1; /* Firefox */
     }
     .search_box {
@@ -333,87 +344,20 @@
     .datepicker_arrows_right {
         text-align: left
     }
-    .back_col_0 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_1 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_2 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_3 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_4 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_5 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_6 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_7 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_8 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_9 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_10 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_11 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_12 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_13 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_14 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_15 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_16 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_17 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_18 {
-        background: hsl(240,50%,80%);
-        }
-    .back_col_19 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_20 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_21 {
-        background: hsl(240,50%,60%);
-        }
-    .back_col_22 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_23 {
-        background: hsl(240,50%,40%);
-        }
-    .back_col_24 {
-        background: hsl(240,50%,40%);
-        }
     .city_row {
         height:5vh;
     }
     .date_row {
         height:5vh;
     }
+    .col_4 {
+      background: #eee;
+      font-weight: bold;
+    }
+    .col {
+      font-weight: lighter;
+    }
+
 </style>
 
 
@@ -425,14 +369,14 @@
                 <td class="datepicker_arrows datepicker_arrows_left" colspan={datepicker_divs_count} on:click={() => datepickerArrowClicked("left")}>◄</td>
                 <td class="datepicker_box" colspan=3><input class="datepicker_input" type="text" id="datepicker"></td>
                 <td class="datepicker_arrows datepicker_arrows_right" colspan={datepicker_divs_count} on:click={() => datepickerArrowClicked("right")}>►</td>
-            </tr> 
+            </tr>
             {#each groups[1].city_names as city_name,i}
                 <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
                     <td class="city_name_active" city_name_row={i} group=1 draggable={true} on:dragstart={event => dragstart(event, 1, i)}  on:click={event => handleClick(event, 0)}>
                         { city_name }
                     </td>
                     {#each tz_clocks[i] as cl,j}
-                        <td class="timezone_clock back_col_{cl} clock_cell" style="width: {datepicker_divs_width}" on:click={event => updateBasetime(j, i)}>
+                        <td class="timezone_clock col_{j} clock_cell" style="width: {datepicker_divs_width}" on:mouseenter={event => hoverCol(j)} on:mouseleave={event => unHoverCol(j)} on:click={event => updateBasetime(j, i)}>
                             {cl}:00
                         </td>
                     {/each}
@@ -448,7 +392,7 @@
             <td class="inactive_row" colspan={datepicker_divs_count}></td>
             </tr>
             {/each}
-
+<tr></tr>
             <tr class="city_row city_search_row">
                 <td>
                     <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>
@@ -456,7 +400,7 @@
                         <DropdownMenu style="max-height: 40vh; overflow:scroll;">
                             {#each groups[3].city_names as menu_item,i}
                                 <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>{menu_item}</DropdownItem>
-                            {/each} 
+                            {/each}
                         </DropdownMenu>
                     </Dropdown>
                 </td>
@@ -476,4 +420,3 @@
     <div class="d-none d-sm-none d-md-none d-lg-block d-xl-none" data-size="lg"></div>
     <div class="d-none d-sm-none d-md-none d-lg-none d-xl-block" data-size="xl"></div>
 </div>
-
