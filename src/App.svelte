@@ -69,8 +69,10 @@
     }
 
     function initialiseTable() {
+        console.log("initialiseTable");
         getViewportSize();
         updateTzs();
+        setTimeout(defaultHighlighting,100);  // for some reason this doesn't happen unless we give it a timeout.
     }
 
     function loadMomentElements() {
@@ -103,15 +105,33 @@
         updateTzs(new_basetime);
     };
 
+    function clearHighlighting() {
+      let class_name = ".timezone_clock";
+      jQuery(class_name).css("font-weight", 'normal');
+      jQuery(class_name).css("background", "none");
+    }
+
+    function defaultHighlighting() {
+      clearHighlighting();
+      let middle_col = (datepicker_divs_count+1).toString()
+      let class_name = ".col_"+middle_col;
+      jQuery(class_name).css("font-weight", 'bold');
+      jQuery(class_name).css("background", "#eee");
+    }
+
+
     function hoverCol(col_nb) {
-      // let the_dom_element = jQuery(".col_"+col_nb);
+      clearHighlighting();
       let class_name = ".col_"+col_nb;
-      jQuery(class_name).css("font-weight", 700);
+      jQuery(class_name).css("font-weight", 'bold');
+      jQuery(class_name).css("background", "#eee");
     };
 
     function unHoverCol(col_nb) {
       let class_name = ".col_"+col_nb;
-      jQuery(class_name).css("font-weight", 400);
+      jQuery(class_name).css("font-weight", 'normal');
+      jQuery(class_name).css("background", "none");
+      defaultHighlighting();
     };
 
     function updateTzs(new_basetime) {
@@ -176,6 +196,7 @@
         search_box.value="";
         setSearchBoxData();
         updateTzs(basetime);
+        setTimeout(defaultHighlighting,50);
     }
 
     function setDefaultViewData() {
@@ -216,6 +237,7 @@
         getViewportSize();
         console.log(getViewportSize());
         updateTzs();
+        defaultHighlighting();
     }
     jQuery(window).on('resize', windowResize);
 
@@ -349,10 +371,6 @@
     }
     .date_row {
         height:5vh;
-    }
-    .col_4 {
-      background: #eee;
-      font-weight: bold;
     }
     .col {
       font-weight: lighter;

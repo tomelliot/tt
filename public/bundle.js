@@ -13330,58 +13330,58 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[42] = list[i];
-    	child_ctx[44] = i;
+    	child_ctx[44] = list[i];
+    	child_ctx[46] = i;
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[45] = list[i];
-    	child_ctx[44] = i;
+    	child_ctx[47] = list[i];
+    	child_ctx[46] = i;
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[47] = list[i];
-    	child_ctx[44] = i;
+    	child_ctx[49] = list[i];
+    	child_ctx[46] = i;
     	return child_ctx;
     }
 
     function get_each_context_4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[50] = list[i];
-    	child_ctx[52] = i;
+    	child_ctx[52] = list[i];
+    	child_ctx[54] = i;
     	return child_ctx;
     }
 
     function get_each_context_3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[47] = list[i];
-    	child_ctx[44] = i;
+    	child_ctx[49] = list[i];
+    	child_ctx[46] = i;
     	return child_ctx;
     }
 
-    // (378:20) {#each tz_clocks[i] as cl,j}
+    // (396:20) {#each tz_clocks[i] as cl,j}
     function create_each_block_4(ctx) {
     	let td;
-    	let t0_value = /*cl*/ ctx[50] + "";
+    	let t0_value = /*cl*/ ctx[52] + "";
     	let t0;
     	let t1;
     	let td_class_value;
     	let dispose;
 
     	function mouseenter_handler(...args) {
-    		return /*mouseenter_handler*/ ctx[31](/*j*/ ctx[52], ...args);
+    		return /*mouseenter_handler*/ ctx[33](/*j*/ ctx[54], ...args);
     	}
 
     	function mouseleave_handler(...args) {
-    		return /*mouseleave_handler*/ ctx[32](/*j*/ ctx[52], ...args);
+    		return /*mouseleave_handler*/ ctx[34](/*j*/ ctx[54], ...args);
     	}
 
     	function click_handler_3(...args) {
-    		return /*click_handler_3*/ ctx[33](/*j*/ ctx[52], /*i*/ ctx[44], ...args);
+    		return /*click_handler_3*/ ctx[35](/*j*/ ctx[54], /*i*/ ctx[46], ...args);
     	}
 
     	const block = {
@@ -13389,9 +13389,9 @@ var app = (function () {
     			td = element("td");
     			t0 = text(t0_value);
     			t1 = text(":00");
-    			attr_dev(td, "class", td_class_value = "timezone_clock col_" + /*j*/ ctx[52] + " clock_cell" + " svelte-zwg6y9");
+    			attr_dev(td, "class", td_class_value = "timezone_clock col_" + /*j*/ ctx[54] + " clock_cell" + " svelte-tz021p");
     			set_style(td, "width", /*datepicker_divs_width*/ ctx[4]);
-    			add_location(td, file$3, 378, 24, 11921);
+    			add_location(td, file$3, 396, 24, 12666);
 
     			dispose = [
     				listen_dev(td, "mouseenter", mouseenter_handler, false, false, false),
@@ -13406,7 +13406,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty[0] & /*tz_clocks*/ 4 && t0_value !== (t0_value = /*cl*/ ctx[50] + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*tz_clocks*/ 4 && t0_value !== (t0_value = /*cl*/ ctx[52] + "")) set_data_dev(t0, t0_value);
 
     			if (dirty[0] & /*datepicker_divs_width*/ 16) {
     				set_style(td, "width", /*datepicker_divs_width*/ ctx[4]);
@@ -13422,18 +13422,18 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(378:20) {#each tz_clocks[i] as cl,j}",
+    		source: "(396:20) {#each tz_clocks[i] as cl,j}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (373:12) {#each groups[1].city_names as city_name,i}
+    // (391:12) {#each groups[1].city_names as city_name,i}
     function create_each_block_3(ctx) {
     	let tr;
     	let td;
-    	let t0_value = /*city_name*/ ctx[47] + "";
+    	let t0_value = /*city_name*/ ctx[49] + "";
     	let t0;
     	let td_city_name_row_value;
     	let td_draggable_value;
@@ -13441,10 +13441,10 @@ var app = (function () {
     	let dispose;
 
     	function dragstart_handler(...args) {
-    		return /*dragstart_handler*/ ctx[29](/*i*/ ctx[44], ...args);
+    		return /*dragstart_handler*/ ctx[31](/*i*/ ctx[46], ...args);
     	}
 
-    	let each_value_4 = /*tz_clocks*/ ctx[2][/*i*/ ctx[44]];
+    	let each_value_4 = /*tz_clocks*/ ctx[2][/*i*/ ctx[46]];
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value_4.length; i += 1) {
@@ -13462,18 +13462,18 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(td, "class", "city_name_active svelte-zwg6y9");
-    			attr_dev(td, "city_name_row", td_city_name_row_value = /*i*/ ctx[44]);
+    			attr_dev(td, "class", "city_name_active svelte-tz021p");
+    			attr_dev(td, "city_name_row", td_city_name_row_value = /*i*/ ctx[46]);
     			attr_dev(td, "group", "1");
     			attr_dev(td, "draggable", td_draggable_value = true);
-    			add_location(td, file$3, 374, 20, 11621);
-    			attr_dev(tr, "class", "city_row svelte-zwg6y9");
-    			add_location(tr, file$3, 373, 16, 11522);
+    			add_location(td, file$3, 392, 20, 12366);
+    			attr_dev(tr, "class", "city_row svelte-tz021p");
+    			add_location(tr, file$3, 391, 16, 12267);
 
     			dispose = [
     				listen_dev(td, "dragstart", dragstart_handler, false, false, false),
-    				listen_dev(td, "click", /*click_handler_2*/ ctx[30], false, false, false),
-    				listen_dev(tr, "drop", /*drop_handler*/ ctx[34], false, false, false),
+    				listen_dev(td, "click", /*click_handler_2*/ ctx[32], false, false, false),
+    				listen_dev(tr, "drop", /*drop_handler*/ ctx[36], false, false, false),
     				listen_dev(tr, "dragover", dragover, false, false, false)
     			];
     		},
@@ -13489,10 +13489,10 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty[0] & /*groups*/ 2 && t0_value !== (t0_value = /*city_name*/ ctx[47] + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*groups*/ 2 && t0_value !== (t0_value = /*city_name*/ ctx[49] + "")) set_data_dev(t0, t0_value);
 
-    			if (dirty[0] & /*datepicker_divs_width, updateBasetime, tz_clocks*/ 84) {
-    				each_value_4 = /*tz_clocks*/ ctx[2][/*i*/ ctx[44]];
+    			if (dirty[0] & /*datepicker_divs_width, unHoverCol, updateBasetime, tz_clocks*/ 212) {
+    				each_value_4 = /*tz_clocks*/ ctx[2][/*i*/ ctx[46]];
     				let i;
 
     				for (i = 0; i < each_value_4.length; i += 1) {
@@ -13525,18 +13525,18 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(373:12) {#each groups[1].city_names as city_name,i}",
+    		source: "(391:12) {#each groups[1].city_names as city_name,i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (385:12) {#each groups[0].city_names as city_name,i}
+    // (403:12) {#each groups[0].city_names as city_name,i}
     function create_each_block_2(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*city_name*/ ctx[47] + "";
+    	let t0_value = /*city_name*/ ctx[49] + "";
     	let t0;
     	let td0_city_name_row_value;
     	let td0_draggable_value;
@@ -13549,7 +13549,7 @@ var app = (function () {
     	let dispose;
 
     	function dragstart_handler_1(...args) {
-    		return /*dragstart_handler_1*/ ctx[35](/*i*/ ctx[44], ...args);
+    		return /*dragstart_handler_1*/ ctx[37](/*i*/ ctx[46], ...args);
     	}
 
     	const block = {
@@ -13563,29 +13563,29 @@ var app = (function () {
     			td2 = element("td");
     			t3 = space();
     			td3 = element("td");
-    			attr_dev(td0, "class", "city_name_inactive svelte-zwg6y9");
-    			attr_dev(td0, "city_name_row", td0_city_name_row_value = /*i*/ ctx[44]);
+    			attr_dev(td0, "class", "city_name_inactive svelte-tz021p");
+    			attr_dev(td0, "city_name_row", td0_city_name_row_value = /*i*/ ctx[46]);
     			attr_dev(td0, "group", "0");
     			attr_dev(td0, "draggable", td0_draggable_value = true);
-    			add_location(td0, file$3, 386, 12, 12419);
-    			attr_dev(td1, "class", "inactive_row svelte-zwg6y9");
+    			add_location(td0, file$3, 404, 12, 13164);
+    			attr_dev(td1, "class", "inactive_row svelte-tz021p");
     			attr_dev(td1, "colspan", /*datepicker_divs_count*/ ctx[3]);
-    			add_location(td1, file$3, 389, 12, 12698);
-    			attr_dev(td2, "class", "inactive_row svelte-zwg6y9");
+    			add_location(td1, file$3, 407, 12, 13443);
+    			attr_dev(td2, "class", "inactive_row svelte-tz021p");
     			attr_dev(td2, "colspan", "3");
-    			add_location(td2, file$3, 390, 12, 12773);
-    			attr_dev(td3, "class", "inactive_row svelte-zwg6y9");
+    			add_location(td2, file$3, 408, 12, 13518);
+    			attr_dev(td3, "class", "inactive_row svelte-tz021p");
     			attr_dev(td3, "colspan", /*datepicker_divs_count*/ ctx[3]);
-    			add_location(td3, file$3, 391, 12, 12826);
-    			attr_dev(tr, "class", "city_row svelte-zwg6y9");
-    			add_location(tr, file$3, 385, 12, 12328);
+    			add_location(td3, file$3, 409, 12, 13571);
+    			attr_dev(tr, "class", "city_row svelte-tz021p");
+    			add_location(tr, file$3, 403, 12, 13073);
 
     			dispose = [
     				listen_dev(td0, "dragstart", dragstart_handler_1, false, false, false),
-    				listen_dev(td0, "drop", /*drop_handler_1*/ ctx[36], false, false, false),
-    				listen_dev(td0, "click", /*click_handler_4*/ ctx[37], false, false, false),
+    				listen_dev(td0, "drop", /*drop_handler_1*/ ctx[38], false, false, false),
+    				listen_dev(td0, "click", /*click_handler_4*/ ctx[39], false, false, false),
     				listen_dev(td0, "dragover", dragover, false, false, false),
-    				listen_dev(tr, "drop", /*drop_handler_2*/ ctx[38], false, false, false),
+    				listen_dev(tr, "drop", /*drop_handler_2*/ ctx[40], false, false, false),
     				listen_dev(tr, "dragover", dragover, false, false, false)
     			];
     		},
@@ -13602,7 +13602,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty[0] & /*groups*/ 2 && t0_value !== (t0_value = /*city_name*/ ctx[47] + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*groups*/ 2 && t0_value !== (t0_value = /*city_name*/ ctx[49] + "")) set_data_dev(t0, t0_value);
 
     			if (dirty[0] & /*datepicker_divs_count*/ 8) {
     				attr_dev(td1, "colspan", /*datepicker_divs_count*/ ctx[3]);
@@ -13622,16 +13622,16 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(385:12) {#each groups[0].city_names as city_name,i}",
+    		source: "(403:12) {#each groups[0].city_names as city_name,i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (402:32) <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>
+    // (420:32) <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>
     function create_default_slot_2(ctx) {
-    	let t_value = /*menu_item*/ ctx[45] + "";
+    	let t_value = /*menu_item*/ ctx[47] + "";
     	let t;
 
     	const block = {
@@ -13642,7 +13642,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*groups*/ 2 && t_value !== (t_value = /*menu_item*/ ctx[45] + "")) set_data_dev(t, t_value);
+    			if (dirty[0] & /*groups*/ 2 && t_value !== (t_value = /*menu_item*/ ctx[47] + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -13653,20 +13653,20 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(402:32) <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>",
+    		source: "(420:32) <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (401:28) {#each groups[3].city_names as menu_item,i}
+    // (419:28) {#each groups[3].city_names as menu_item,i}
     function create_each_block_1(ctx) {
     	let current;
 
     	const dropdownitem = new DropdownItem({
     			props: {
-    				city_name_row: /*i*/ ctx[44],
+    				city_name_row: /*i*/ ctx[46],
     				group: "3",
     				$$slots: { default: [create_default_slot_2] },
     				$$scope: { ctx }
@@ -13674,7 +13674,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	dropdownitem.$on("click", /*click_handler_6*/ ctx[41]);
+    	dropdownitem.$on("click", /*click_handler_6*/ ctx[43]);
 
     	const block = {
     		c: function create() {
@@ -13687,7 +13687,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const dropdownitem_changes = {};
 
-    			if (dirty[0] & /*groups*/ 2 | dirty[1] & /*$$scope*/ 4194304) {
+    			if (dirty[0] & /*groups*/ 2 | dirty[1] & /*$$scope*/ 16777216) {
     				dropdownitem_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13711,14 +13711,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(401:28) {#each groups[3].city_names as menu_item,i}",
+    		source: "(419:28) {#each groups[3].city_names as menu_item,i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (400:24) <DropdownMenu style="max-height: 40vh; overflow:scroll;">
+    // (418:24) <DropdownMenu style="max-height: 40vh; overflow:scroll;">
     function create_default_slot_1(ctx) {
     	let each_1_anchor;
     	let current;
@@ -13750,7 +13750,7 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*handleClick, groups*/ 258) {
+    			if (dirty[0] & /*handleClick, groups*/ 514) {
     				each_value_1 = /*groups*/ ctx[1][3].city_names;
     				let i;
 
@@ -13805,14 +13805,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(400:24) <DropdownMenu style=\\\"max-height: 40vh; overflow:scroll;\\\">",
+    		source: "(418:24) <DropdownMenu style=\\\"max-height: 40vh; overflow:scroll;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (398:20) <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>
+    // (416:20) <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>
     function create_default_slot(ctx) {
     	let input;
     	let t;
@@ -13834,11 +13834,11 @@ var app = (function () {
     			t = space();
     			create_component(dropdownmenu.$$.fragment);
     			attr_dev(input, "type", "search_box");
-    			attr_dev(input, "class", "form-control search_box svelte-zwg6y9");
+    			attr_dev(input, "class", "form-control search_box svelte-tz021p");
     			attr_dev(input, "id", "city_search_box_box");
     			attr_dev(input, "placeholder", "Search City");
-    			add_location(input, file$3, 398, 24, 13137);
-    			dispose = listen_dev(input, "click", /*click_handler_5*/ ctx[40], false, false, false);
+    			add_location(input, file$3, 416, 24, 13882);
+    			dispose = listen_dev(input, "click", /*click_handler_5*/ ctx[42], false, false, false);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -13849,7 +13849,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const dropdownmenu_changes = {};
 
-    			if (dirty[0] & /*groups*/ 2 | dirty[1] & /*$$scope*/ 4194304) {
+    			if (dirty[0] & /*groups*/ 2 | dirty[1] & /*$$scope*/ 16777216) {
     				dropdownmenu_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13876,22 +13876,22 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(398:20) <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>",
+    		source: "(416:20) <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (407:16) {#each tz_clocks[0] as clock,i}
+    // (425:16) {#each tz_clocks[0] as clock,i}
     function create_each_block(ctx) {
     	let td;
 
     	const block = {
     		c: function create() {
     			td = element("td");
-    			attr_dev(td, "class", "svelte-zwg6y9");
-    			add_location(td, file$3, 407, 20, 13791);
+    			attr_dev(td, "class", "svelte-tz021p");
+    			add_location(td, file$3, 425, 20, 14536);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
@@ -13905,7 +13905,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(407:16) {#each tz_clocks[0] as clock,i}",
+    		source: "(425:16) {#each tz_clocks[0] as clock,i}",
     		ctx
     	});
 
@@ -13968,7 +13968,7 @@ var app = (function () {
     	const dropdown = new Dropdown({
     			props: {
     				isOpen: /*isDropdownOpen*/ ctx[0],
-    				toggle: /*func*/ ctx[39],
+    				toggle: /*func*/ ctx[41],
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			},
@@ -14036,60 +14036,60 @@ var app = (function () {
     			div4 = element("div");
     			t16 = space();
     			div5 = element("div");
-    			attr_dev(td0, "class", "svelte-zwg6y9");
-    			add_location(td0, file$3, 367, 16, 10989);
-    			attr_dev(td1, "class", "datepicker_arrows datepicker_arrows_left svelte-zwg6y9");
+    			attr_dev(td0, "class", "svelte-tz021p");
+    			add_location(td0, file$3, 385, 16, 11734);
+    			attr_dev(td1, "class", "datepicker_arrows datepicker_arrows_left svelte-tz021p");
     			attr_dev(td1, "colspan", /*datepicker_divs_count*/ ctx[3]);
-    			add_location(td1, file$3, 368, 16, 11015);
-    			attr_dev(input, "class", "datepicker_input svelte-zwg6y9");
+    			add_location(td1, file$3, 386, 16, 11760);
+    			attr_dev(input, "class", "datepicker_input svelte-tz021p");
     			attr_dev(input, "type", "text");
     			attr_dev(input, "id", "datepicker");
-    			add_location(input, file$3, 369, 53, 11208);
-    			attr_dev(td2, "class", "datepicker_box svelte-zwg6y9");
+    			add_location(input, file$3, 387, 53, 11953);
+    			attr_dev(td2, "class", "datepicker_box svelte-tz021p");
     			attr_dev(td2, "colspan", "3");
-    			add_location(td2, file$3, 369, 16, 11171);
-    			attr_dev(td3, "class", "datepicker_arrows datepicker_arrows_right svelte-zwg6y9");
+    			add_location(td2, file$3, 387, 16, 11916);
+    			attr_dev(td3, "class", "datepicker_arrows datepicker_arrows_right svelte-tz021p");
     			attr_dev(td3, "colspan", /*datepicker_divs_count*/ ctx[3]);
-    			add_location(td3, file$3, 370, 16, 11290);
-    			attr_dev(tr0, "class", "date_row svelte-zwg6y9");
-    			add_location(tr0, file$3, 366, 12, 10951);
-    			attr_dev(tr1, "class", "svelte-zwg6y9");
-    			add_location(tr1, file$3, 394, 0, 12927);
-    			attr_dev(td4, "class", "svelte-zwg6y9");
-    			add_location(td4, file$3, 396, 16, 13003);
-    			attr_dev(tr2, "class", "city_row city_search_row svelte-zwg6y9");
-    			add_location(tr2, file$3, 395, 12, 12949);
-    			attr_dev(tr3, "class", "svelte-zwg6y9");
-    			add_location(tr3, file$3, 410, 12, 13855);
-    			attr_dev(tbody, "class", "svelte-zwg6y9");
-    			add_location(tbody, file$3, 365, 8, 10931);
-    			attr_dev(table, "class", "table city_table svelte-zwg6y9");
+    			add_location(td3, file$3, 388, 16, 12035);
+    			attr_dev(tr0, "class", "date_row svelte-tz021p");
+    			add_location(tr0, file$3, 384, 12, 11696);
+    			attr_dev(tr1, "class", "svelte-tz021p");
+    			add_location(tr1, file$3, 412, 0, 13672);
+    			attr_dev(td4, "class", "svelte-tz021p");
+    			add_location(td4, file$3, 414, 16, 13748);
+    			attr_dev(tr2, "class", "city_row city_search_row svelte-tz021p");
+    			add_location(tr2, file$3, 413, 12, 13694);
+    			attr_dev(tr3, "class", "svelte-tz021p");
+    			add_location(tr3, file$3, 428, 12, 14600);
+    			attr_dev(tbody, "class", "svelte-tz021p");
+    			add_location(tbody, file$3, 383, 8, 11676);
+    			attr_dev(table, "class", "table city_table svelte-tz021p");
     			attr_dev(table, "style:line-height:10vh", "");
-    			add_location(table, file$3, 364, 4, 10867);
-    			attr_dev(div0, "class", "container svelte-zwg6y9");
-    			add_location(div0, file$3, 363, 0, 10839);
-    			attr_dev(div1, "class", "d-block d-sm-none d-md-none d-lg-none d-xl-none svelte-zwg6y9");
+    			add_location(table, file$3, 382, 4, 11612);
+    			attr_dev(div0, "class", "container svelte-tz021p");
+    			add_location(div0, file$3, 381, 0, 11584);
+    			attr_dev(div1, "class", "d-block d-sm-none d-md-none d-lg-none d-xl-none svelte-tz021p");
     			attr_dev(div1, "data-size", "xs");
-    			add_location(div1, file$3, 416, 4, 13924);
-    			attr_dev(div2, "class", "d-none d-sm-block d-md-none d-lg-none d-xl-none svelte-zwg6y9");
+    			add_location(div1, file$3, 434, 4, 14669);
+    			attr_dev(div2, "class", "d-none d-sm-block d-md-none d-lg-none d-xl-none svelte-tz021p");
     			attr_dev(div2, "data-size", "sm");
-    			add_location(div2, file$3, 417, 4, 14011);
-    			attr_dev(div3, "class", "d-none d-sm-none d-md-block d-lg-none d-xl-none svelte-zwg6y9");
+    			add_location(div2, file$3, 435, 4, 14756);
+    			attr_dev(div3, "class", "d-none d-sm-none d-md-block d-lg-none d-xl-none svelte-tz021p");
     			attr_dev(div3, "data-size", "md");
-    			add_location(div3, file$3, 418, 4, 14098);
-    			attr_dev(div4, "class", "d-none d-sm-none d-md-none d-lg-block d-xl-none svelte-zwg6y9");
+    			add_location(div3, file$3, 436, 4, 14843);
+    			attr_dev(div4, "class", "d-none d-sm-none d-md-none d-lg-block d-xl-none svelte-tz021p");
     			attr_dev(div4, "data-size", "lg");
-    			add_location(div4, file$3, 419, 4, 14185);
-    			attr_dev(div5, "class", "d-none d-sm-none d-md-none d-lg-none d-xl-block svelte-zwg6y9");
+    			add_location(div4, file$3, 437, 4, 14930);
+    			attr_dev(div5, "class", "d-none d-sm-none d-md-none d-lg-none d-xl-block svelte-tz021p");
     			attr_dev(div5, "data-size", "xl");
-    			add_location(div5, file$3, 420, 4, 14272);
+    			add_location(div5, file$3, 438, 4, 15017);
     			attr_dev(div6, "id", "sizer");
-    			attr_dev(div6, "class", "svelte-zwg6y9");
-    			add_location(div6, file$3, 415, 0, 13903);
+    			attr_dev(div6, "class", "svelte-tz021p");
+    			add_location(div6, file$3, 433, 0, 14648);
 
     			dispose = [
-    				listen_dev(td1, "click", /*click_handler*/ ctx[27], false, false, false),
-    				listen_dev(td3, "click", /*click_handler_1*/ ctx[28], false, false, false)
+    				listen_dev(td1, "click", /*click_handler*/ ctx[29], false, false, false),
+    				listen_dev(td3, "click", /*click_handler_1*/ ctx[30], false, false, false)
     			];
     		},
     		l: function claim(nodes) {
@@ -14159,7 +14159,7 @@ var app = (function () {
     				attr_dev(td3, "colspan", /*datepicker_divs_count*/ ctx[3]);
     			}
 
-    			if (dirty[0] & /*drop, tz_clocks, datepicker_divs_width, updateBasetime, handleClick, groups*/ 470) {
+    			if (dirty[0] & /*drop, tz_clocks, datepicker_divs_width, unHoverCol, updateBasetime, handleClick, groups*/ 982) {
     				each_value_3 = /*groups*/ ctx[1][1].city_names;
     				let i;
 
@@ -14182,7 +14182,7 @@ var app = (function () {
     				each_blocks_2.length = each_value_3.length;
     			}
 
-    			if (dirty[0] & /*drop, datepicker_divs_count, handleClick, groups*/ 394) {
+    			if (dirty[0] & /*drop, datepicker_divs_count, handleClick, groups*/ 778) {
     				each_value_2 = /*groups*/ ctx[1][0].city_names;
     				let i;
 
@@ -14207,9 +14207,9 @@ var app = (function () {
 
     			const dropdown_changes = {};
     			if (dirty[0] & /*isDropdownOpen*/ 1) dropdown_changes.isOpen = /*isDropdownOpen*/ ctx[0];
-    			if (dirty[0] & /*isDropdownOpen*/ 1) dropdown_changes.toggle = /*func*/ ctx[39];
+    			if (dirty[0] & /*isDropdownOpen*/ 1) dropdown_changes.toggle = /*func*/ ctx[41];
 
-    			if (dirty[0] & /*groups, isDropdownOpen*/ 3 | dirty[1] & /*$$scope*/ 4194304) {
+    			if (dirty[0] & /*groups, isDropdownOpen*/ 3 | dirty[1] & /*$$scope*/ 16777216) {
     				dropdown_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14270,14 +14270,17 @@ var app = (function () {
     	return block;
     }
 
-    function hoverCol(col_nb) {
-    	let class_name = ".col_" + col_nb;
-    	jquery(class_name).css("font-weight", 700);
+    function clearHighlighting() {
+    	let class_name = ".timezone_clock";
+    	jquery(class_name).css("font-weight", "normal");
+    	jquery(class_name).css("background", "none");
     }
 
-    function unHoverCol(col_nb) {
+    function hoverCol(col_nb) {
+    	clearHighlighting();
     	let class_name = ".col_" + col_nb;
-    	jquery(class_name).css("font-weight", 400);
+    	jquery(class_name).css("font-weight", "bold");
+    	jquery(class_name).css("background", "#eee");
     }
 
     function dragstart(ev, group, item) {
@@ -14367,8 +14370,10 @@ var app = (function () {
     	}
 
     	function initialiseTable() {
+    		console.log("initialiseTable");
     		getViewportSize();
     		updateTzs();
+    		setTimeout(defaultHighlighting, 100);
     	}
 
     	function loadMomentElements() {
@@ -14407,7 +14412,24 @@ var app = (function () {
     	}
 
     	
+
+    	function defaultHighlighting() {
+    		clearHighlighting();
+    		let middle_col = (datepicker_divs_count + 1).toString();
+    		let class_name = ".col_" + middle_col;
+    		jquery(class_name).css("font-weight", "bold");
+    		jquery(class_name).css("background", "#eee");
+    	}
+
     	
+
+    	function unHoverCol(col_nb) {
+    		let class_name = ".col_" + col_nb;
+    		jquery(class_name).css("font-weight", "normal");
+    		jquery(class_name).css("background", "none");
+    		defaultHighlighting();
+    	}
+
     	
 
     	function updateTzs(new_basetime) {
@@ -14465,6 +14487,7 @@ var app = (function () {
     		search_box.value = "";
     		setSearchBoxData();
     		updateTzs(basetime);
+    		setTimeout(defaultHighlighting, 50);
     	}
 
     	function setDefaultViewData() {
@@ -14510,6 +14533,7 @@ var app = (function () {
     		getViewportSize();
     		console.log(getViewportSize());
     		updateTzs();
+    		defaultHighlighting();
     	}
 
     	jquery(window).on("resize", windowResize);
@@ -14583,6 +14607,7 @@ var app = (function () {
     		datepicker_divs_width,
     		datepickerArrowClicked,
     		updateBasetime,
+    		unHoverCol,
     		drop,
     		handleClick,
     		mounted,
@@ -14595,6 +14620,7 @@ var app = (function () {
     		loadMomentElements,
     		getTimezoneName,
     		getClockArray,
+    		defaultHighlighting,
     		updateTzs,
     		setDefaultViewData,
     		setSearchBoxData,
