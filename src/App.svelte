@@ -30,7 +30,10 @@
         // The page is ready.
         console.log('onMount');
         mounted = true;
-        allJsLoaded();
+        // allJsLoaded();
+        jQuery(document).ready(function(){
+          allJsLoaded()});
+
     });
 
     function allJsLoaded() {
@@ -113,7 +116,7 @@
 
     function defaultHighlighting() {
       clearHighlighting();
-      let middle_col = (datepicker_divs_count+1).toString()
+      let middle_col = (datepicker_divs_count).toString()
       let class_name = ".col_"+middle_col;
       jQuery(class_name).css("font-weight", 'bold');
       jQuery(class_name).css("background", "#eee");
@@ -149,6 +152,7 @@
         for (var i = 0; i <= groups[1].city_names.length - 1; i++) {
             if (i == 0) {
                 // first element is the "reference timezone"
+                console.log(groups[1])
                 reference_tz = basetime.tz(getTimezoneName(groups[1].city_names[i])).utcOffset();
             }
             var local_time = moment(basetime.format()).tz(getTimezoneName(groups[1].city_names[i]));
@@ -180,6 +184,8 @@
         var i = ev.dataTransfer.getData("item");
         var old_g = ev.dataTransfer.getData("group");
         const city_name = groups[old_g].city_names.splice(i,1)[0];
+        console.log("city_name:")
+        console.log(city_name)
         groups[new_g].city_names = groups[new_g].city_names.concat(city_name);
         groups[new_g].city_names.sort();
         updateTzs(basetime);
@@ -190,6 +196,10 @@
         console.log("handleClick")
         var i = ev.target.attributes.city_name_row.value;
         var old_g = ev.target.attributes.group.value;
+        if (groups[old_g].city_names.length == 1) {
+          console.log("Prevent user from having 0 cities selected")
+          return
+        }
         const city_name = groups[old_g].city_names.splice(i,1)[0];
         groups[new_g].city_names.push(city_name);
         groups[new_g].city_names.sort();
@@ -222,12 +232,12 @@
     function getViewportSize() {
         let viewportSize = jQuery("#sizer").find("div:visible").data("size");
         if ((viewportSize == "sm") || viewportSize == "xs") {
-            nb_clocks = 5;
+            nb_clocks = 3;
             datepicker_divs_count = 1;
-            datepicker_divs_width = "16%";
+            datepicker_divs_width = "20%";
         } else {
             nb_clocks = 9;
-            datepicker_divs_count = 3;
+            datepicker_divs_count = 4;
             datepicker_divs_width = "10%";
         }
         return viewportSize;
@@ -310,6 +320,13 @@
     .city_name_active:hover {
         cursor: pointer;
     }
+    .datepicker_table {
+        background-color: inherit;
+        border-width: 1px;
+        /*border-style: solid;*/
+        border-style: none;
+        margin-bottom: 0;
+    }
     .city_table {
         background-color: inherit;
         border-width: 1px;
@@ -377,17 +394,18 @@
     }
 
 </style>
-
-
 <div class="container">
-    <table class="table city_table" style:line-height:10vh>
+    <table class="table datepicker_table" style:line-height:10vh>
         <tbody>
             <tr class="date_row">
-                <td></td>
-                <td class="datepicker_arrows datepicker_arrows_left" colspan={datepicker_divs_count} on:click={() => datepickerArrowClicked("left")}>◄</td>
-                <td class="datepicker_box" colspan=3><input class="datepicker_input" type="text" id="datepicker"></td>
-                <td class="datepicker_arrows datepicker_arrows_right" colspan={datepicker_divs_count} on:click={() => datepickerArrowClicked("right")}>►</td>
+                <td class="datepicker_arrows datepicker_arrows_left" on:click={() => datepickerArrowClicked("left")}>◄</td>
+                <td class="datepicker_box"><input class="datepicker_input" type="text" id="datepicker"></td>
+                <td class="datepicker_arrows datepicker_arrows_right" on:click={() => datepickerArrowClicked("right")}>►</td>
             </tr>
+        </tbody>
+    </table>
+    <table class="table city_table" style:line-height:10vh>
+        <tbody>
             {#each groups[1].city_names as city_name,i}
                 <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
                     <td class="city_name_active" city_name_row={i} group=1 draggable={true} on:dragstart={event => dragstart(event, 1, i)}  on:click={event => handleClick(event, 0)}>
@@ -405,9 +423,6 @@
             <td class="city_name_inactive" city_name_row={i} group=0 draggable={true} on:dragstart={event => dragstart(event, 0, i)} on:drop={event => drop(event, 0)} on:click={event => handleClick(event, 1)} on:dragover={dragover}>
                 {city_name}
             </td>
-            <td class="inactive_row" colspan={datepicker_divs_count}></td>
-            <td class="inactive_row" colspan=3></td>
-            <td class="inactive_row" colspan={datepicker_divs_count}></td>
             </tr>
             {/each}
 <tr></tr>
