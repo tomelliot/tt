@@ -196,7 +196,7 @@
         console.log("handleClick")
         var i = ev.target.attributes.city_name_row.value;
         var old_g = ev.target.attributes.group.value;
-        if (groups[old_g].city_names.length == 1) {
+        if ((old_g == 1) && groups[1].city_names.length == 1) {
           console.log("Prevent user from having 0 cities selected")
           return
         }
