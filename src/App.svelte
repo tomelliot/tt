@@ -20,6 +20,7 @@
     let basetime = 0;
     let date_picker = 0;
     let search_box = "";
+    let tz_clocks = [["0:00"]];
 
     groups[0] = {"name": "Visible_Cities_List", "city_names": []};
     groups[1] = {"name": "Cities_Showing_Timezones_List", "city_names": []};
@@ -84,7 +85,6 @@
         console.log(basetime.format())
     };
 
-    let tz_clocks = [0];
     let nb_clocks = 0;
     let datepicker_divs_count = 0;
     let datepicker_divs_width = 0;
@@ -98,7 +98,7 @@
         let clock_array = [];
         clock_basetime.add(-Math.floor(nb_clocks/2)-1, "hours");
         for (var i = nb_clocks - 1; i >= 0; i--) {
-            clock_array = clock_array.concat(clock_basetime.add(1, "hours").hours());
+            clock_array.push(clock_basetime.add(1, "hours").hours());
         }
         return clock_array;
     };
@@ -146,7 +146,7 @@
             basetime = new_basetime
         }
         let tzs = [];
-        tz_clocks = [];
+        let tz_clocks_buf = [];
         let reference_tz = 0;
 
         for (var i = 0; i <= groups[1].city_names.length - 1; i++) {
@@ -164,9 +164,10 @@
             } else {
                 var offset_difference_str = "+" + offset_difference.toString();
             }
-            tzs = tzs.concat(offset_difference_str + ": " + local_time_str);
-            tz_clocks = tz_clocks.concat([getClockArray(local_time)]);
+            tzs.push(offset_difference_str + ": " + local_time_str);
+            tz_clocks_buf = tz_clocks_buf.concat([getClockArray(local_time)]);
         }
+        tz_clocks = tz_clocks_buf;
     }
 
     function dragstart (ev, group, item) {
@@ -186,7 +187,7 @@
         const city_name = groups[old_g].city_names.splice(i,1)[0];
         console.log("city_name:")
         console.log(city_name)
-        groups[new_g].city_names = groups[new_g].city_names.concat(city_name);
+        groups[new_g].city_names.push(city_name);
         groups[new_g].city_names.sort();
         updateTzs(basetime);
     }
@@ -204,17 +205,35 @@
         groups[new_g].city_names.push(city_name);
         groups[new_g].city_names.sort();
         search_box.value="";
+        localStorage.setItem("lastCitiesSelected", JSON.stringify(groups[1]))
         setSearchBoxData();
         updateTzs(basetime);
         setTimeout(defaultHighlighting,50);
     }
 
     function setDefaultViewData() {
-        let cities_to_show = ['Buenos Aires', 'Riga', 'Sydney', 'Vancouver'];
-        for (var i = 0; i <= cities_to_show.length - 1; i++) {
-            groups[0].city_names = groups[0].city_names.concat(cities_to_show[i]);
+      let cities_to_show = ['Berlin','Buenos Aires', 'Riga', 'Sydney'];
+      let cities_selected = "";
+
+        if (localStorage.getItem("lastCitiesSelected")) {
+          cities_selected = JSON.parse(localStorage.getItem("lastCitiesSelected"))["city_names"];
+          console.log("loading from local")
+
+          for (var i = 0; i <= cities_selected.length - 1; i++) {
+              groups[1].city_names.push(cities_selected[i]);
+          }
+        } else {
+          console.log("no local")
+          groups[1].city_names = ["Berlin"];
+          console.log(Array.isArray(groups[1].city_names));
         }
-        groups[1].city_names = ["Berlin"];
+
+        for (var i = 0; i <= cities_to_show.length - 1; i++) {
+            if (!cityIsAlreadyOnPage(cities_to_show[i])) {
+                // this is not already shown in the timezone list, so it can be added to the search_box list
+                groups[0].city_names.push(cities_to_show[i]);
+            }
+        }
     }
 
     function setSearchBoxData() {
@@ -223,7 +242,7 @@
         for (var i = 0; i <= groups[2].city_names.length - 1; i++) {
             if (!cityIsAlreadyOnPage(groups[2].city_names[i])) {
                 // this is not already shown in the timezone list, so it can be added to the search_box list
-                city_names = city_names.concat(groups[2].city_names[i]);
+                city_names.push(groups[2].city_names[i]);
             }
         }
         groups[3].city_names = city_names;
@@ -273,7 +292,7 @@
         for (let i = 0; i < groups[2].city_names.length; i++) {
             if (groups[2].city_names[i].toLowerCase().startsWith(word)) {
                 if (!cityIsAlreadyOnPage(groups[2].city_names[i])) {
-                    city_names = city_names.concat(groups[2].city_names[i]);
+                    city_names.push(groups[2].city_names[i]);
                 }
             }
         }
@@ -406,18 +425,23 @@
     </table>
     <table class="table city_table" style:line-height:10vh>
         <tbody>
-            {#each groups[1].city_names as city_name,i}
-                <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
-                    <td class="city_name_active" city_name_row={i} group=1 draggable={true} on:dragstart={event => dragstart(event, 1, i)}  on:click={event => handleClick(event, 0)}>
-                        { city_name }
-                    </td>
-                    {#each tz_clocks[i] as cl,j}
-                        <td class="timezone_clock col_{j} clock_cell" style="width: {datepicker_divs_width}" on:mouseenter={event => hoverCol(j)} on:mouseleave={event => unHoverCol(j)} on:click={event => updateBasetime(j, i)}>
-                            {cl}:00
-                        </td>
-                    {/each}
-                </tr>
-            {/each}
+          {#if Array.isArray(groups[1].city_names)}
+              {#each groups[1].city_names as city_name,i}
+                  <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
+                      <td class="city_name_active" city_name_row={i} group=1 draggable={true} on:dragstart={event => dragstart(event, 1, i)}  on:click={event => handleClick(event, 0)}>
+                          { city_name }
+                      </td>
+                      {#if Array.isArray(tz_clocks[i])}
+                        {#each tz_clocks[i] as cl,j}
+                            <td class="timezone_clock col_{j} clock_cell" style="width: {datepicker_divs_width}" on:mouseenter={event => hoverCol(j)} on:mouseleave={event => unHoverCol(j)} on:click={event => updateBasetime(j, i)}>
+                                {cl}:00
+                            </td>
+                        {/each}
+                      {/if}
+                  </tr>
+              {/each}
+          {/if}
+          {#if Array.isArray(groups[0].city_names)}
             {#each groups[0].city_names as city_name,i}
             <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
             <td class="city_name_inactive" city_name_row={i} group=0 draggable={true} on:dragstart={event => dragstart(event, 0, i)} on:drop={event => drop(event, 0)} on:click={event => handleClick(event, 1)} on:dragover={dragover}>
@@ -425,21 +449,27 @@
             </td>
             </tr>
             {/each}
+          {/if}
+
 <tr></tr>
             <tr class="city_row city_search_row">
                 <td>
                     <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>
                         <input type="search_box" class="form-control search_box" id="city_search_box_box" placeholder="Search City" on:click={() => (isDropdownOpen = !isDropdownOpen)}>
                         <DropdownMenu style="max-height: 40vh; overflow:scroll;">
-                            {#each groups[3].city_names as menu_item,i}
-                                <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>{menu_item}</DropdownItem>
-                            {/each}
+                          {#if Array.isArray(groups[3].city_names)}
+                              {#each groups[3].city_names as menu_item,i}
+                                  <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>{menu_item}</DropdownItem>
+                              {/each}
+                            {/if}
                         </DropdownMenu>
                     </Dropdown>
                 </td>
-                {#each tz_clocks[0] as clock,i}
-                    <td></td>
-                {/each}
+                {#if tz_clocks.length > 0}
+                  {#each tz_clocks[0] as clock,i}
+                      <td></td>
+                  {/each}
+                {/if}
             </tr>
             <tr></tr>
         </tbody>
