@@ -1,4 +1,4 @@
-export let CITIES = {"city_names":
+ export let CITIES = {"city_names":
 [
 "Abidjan",
 "Accra",
@@ -74,7 +74,7 @@ export let CITIES = {"city_names":
 "Cairo",
 "Calcutta",
 "Cambridge Bay",
-"Campo_Grande",
+"Campo Grande",
 "Canary",
 "Canberra",
 "Cape Verde",
@@ -206,7 +206,7 @@ export let CITIES = {"city_names":
 "Kolkata",
 "Kosrae",
 "Kralendijk",
-"Kuala_Lumpur",
+"Kuala Lumpur",
 "Kuching",
 "Kuwait",
 "Kwajalein",
@@ -222,8 +222,8 @@ export let CITIES = {"city_names":
 "Lome",
 "London",
 "Longyearbyen",
-"Lord_Howe",
-"Los_Angeles",
+"Lord Howe",
+"Los Angeles",
 "Louisville",
 "Lower Princes",
 "Luanda",
@@ -299,7 +299,7 @@ export let CITIES = {"city_names":
 "Ouagadougou",
 "Pacific",
 "Pacific-New",
-"Pago_Pago",
+"Pago Pago",
 "Palau",
 "Palmer",
 "Pangnirtung",
@@ -314,7 +314,7 @@ export let CITIES = {"city_names":
 "Ponape",
 "Pontianak",
 "Port of Spain",
-"Port_Moresby",
+"Port Moresby",
 "Porto Acre",
 "Porto Velho",
 "Porto-Novo",
@@ -351,7 +351,7 @@ export let CITIES = {"city_names":
 "Santa Isabel",
 "Santarem",
 "Santiago",
-"Santo_Domingo",
+"Santo Domingo",
 "Sao Paulo",
 "Sarajevo",
 "Saskatchewan",
@@ -440,7 +440,7 @@ export let CITIES = {"city_names":
 "Zulu",
 "Zurich"
 ],
-"city_timezones":
+"city timezones":
 ["Africa/Abidjan",
 "Africa/Accra",
 "Brazil/Acre",
