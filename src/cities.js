@@ -440,7 +440,7 @@
 "Zulu",
 "Zurich"
 ],
-"city timezones":
+"city_timezones":
 ["Africa/Abidjan",
 "Africa/Accra",
 "Brazil/Acre",
