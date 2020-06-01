@@ -1,2 +1,9 @@
 *.map
 .now
+
+.vercel
+
+node_modules
+package-lock.json
+public/bundle.js
+src/api_key.js

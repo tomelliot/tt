@@ -4,7 +4,7 @@
 <script>
     import { onMount } from 'svelte';
     import jQuery from 'jquery';
-    import { CITIES } from "./cities.js";
+    import { API_KEY } from "./api_key.js";
     import {
         Dropdown,
         DropdownItem,
@@ -46,7 +46,7 @@
       new_city_data = new_city_data;
       cities_showing_tzs = [...cities_showing_tzs, new_city_data];
       window.setTimeout(updateTzs, 200);
-      localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
+      localStorage.setItem("previousCitiesShown", JSON.stringify(cities_showing_tzs))
     }
 
     async function allJsLoaded() {
@@ -83,7 +83,7 @@
 
     async function gettz(city_name, lat, lng) {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `https://maps.googleapis.com/maps/api/timezone/json?location=`+lat+`,`+lng+`&timestamp=1331766000&key=AIzaSyDCeegcKpE4NsNKrsUFx38ycOuwXwNQ2NM`);
+        xhr.open('GET', `https://maps.googleapis.com/maps/api/timezone/json?location=`+lat+`,`+lng+`&timestamp=1331766000&key=`+API_KEY);
         xhr.send();
 
         xhr.onload = () => {
@@ -195,8 +195,7 @@
                 var offset_difference_str = "+" + offset_difference.toString();
             }
             cities_showing_tzs[i].clocks = getClockArray(local_time);
-            localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
-
+            localStorage.setItem("previousCitiesShown", JSON.stringify(cities_showing_tzs))
         }
     }
 
@@ -226,7 +225,7 @@
         console.log(cities_showing_tzs)
         console.log(cities_hiding_tzs)
         console.log("saving to local store")
-        localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
+        localStorage.setItem("previousCitiesShown", JSON.stringify(cities_showing_tzs))
         updateTzs(basetime);
         setTimeout(defaultHighlighting,50);
     }
@@ -234,8 +233,8 @@
     function setDefaultViewData() {
       let loaded_cities = "";
 
-        if (localStorage.getItem("lastCitiesSelected")) {
-          loaded_cities = JSON.parse(localStorage.getItem("lastCitiesSelected"));
+        if (localStorage.getItem("previousCitiesShown")) {
+          loaded_cities = JSON.parse(localStorage.getItem("previousCitiesShown"));
           console.log("loading from local")
           console.log(loaded_cities)
           cities_showing_tzs = loaded_cities
