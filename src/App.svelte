@@ -3,9 +3,8 @@
 
 <script>
     import { onMount } from 'svelte';
-    import jQuery from "jquery";
+    import jQuery from 'jquery';
     import { CITIES } from "./cities.js";
-
     import {
         Dropdown,
         DropdownItem,
@@ -16,36 +15,42 @@
     // a bunch of variables that are needed across function scopes:
     let isDropdownOpen = false;
     let mounted = false;
-    let groups = [{},{},{},{}];
     let basetime = 0;
     let date_picker = 0;
     let search_box = "";
-    let tz_clocks = [["0:00"]];
 
-    groups[0] = {"name": "Visible_Cities_List", "city_names": []};
-    groups[1] = {"name": "Cities_Showing_Timezones_List", "city_names": []};
-    groups[2] = {"name": "All_Cities_List", "city_names": CITIES.city_names, "city_timezones": CITIES.city_timezones};
-    groups[3] = {"name": "Cities_Shown_in_Dropdown_List", "city_names": []};
+    var cities_showing_tzs = [
+      {"name": "Berlin", "tz": "Europe/Berlin", "lat": 52.517, "lng": 13.3889},
+      {"name": "Hamburg", "tz": "Europe/Berlin", "lat": 53.5503, "lng": 10.0007},
+    ];
+
+    var cities_hiding_tzs = [
+      {"name": "Sydney", "tz": "Australia/Sydney", "lat": -33.8549, "lng": 151.216},
+      {"name": "Melbourne", "tz": "Australia/Sydney", "lat": -37.8142, "lng": 144.963},
+    ];
 
     onMount(() => {
         // The page is ready.
         console.log('onMount');
         mounted = true;
-        // allJsLoaded();
         jQuery(document).ready(function(){
+          console.log("document ready")
           allJsLoaded()});
+        });
 
-    });
+    async function newCitySelected(e) {
+      console.log("newCitySelected")
+      var city_name = e.suggestion.name
+      var {lat, lng} = e.suggestion.latlng
+      var new_city_data = await getNewCity(city_name, lat, lng);
+      new_city_data = new_city_data;
+      cities_showing_tzs = [...cities_showing_tzs, new_city_data];
+      window.setTimeout(updateTzs, 200);
+      localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
+    }
 
-    function allJsLoaded() {
+    async function allJsLoaded() {
         console.log('allJsLoaded');
-
-        // Capture the event when user types into the search_box box
-        search_box = document.getElementById("city_search_box_box");
-        window.addEventListener('input', function () {
-            filterCityDropdown(search_box.value.trim().toLowerCase());
-        })
-
         date_picker = new Pikaday({ field: document.getElementById('datepicker'),
             format: 'D MMM YYYY',
             defaultDate: moment().toDate(),
@@ -53,11 +58,45 @@
             onSelect: function() {
                 updateTzs(this.getMoment());}});
 
+        var placesAutocomplete = places({
+          appId: 'pl3XEH1COU1N',
+          apiKey: '4bb455630afbb57b026c0b68a975de5f',
+          container: document.querySelector('#address-input'),
+          type: 'city'
+        });
+        placesAutocomplete.on('change', newCitySelected);
+
+        jQuery(window).on('resize', windowResize);
+        //If the user clicks on any item, hide the menu
+        jQuery('#menuItems').on('click', '.dropdown-item', function(){
+            jQuery("#dropdown_coins").dropdown('toggle');
+        })
         setDefaultViewData();
-        setSearchBoxData();
         loadMomentElements();
         setTimeout(initialiseTable,100);   // for some reason, if we don't wait before calling this then the window size may get reported as `xs` instead of whatever size it actually is.
     };
+
+    async function getNewCity(city_name, lat, lng) {
+        var tzpromise = await gettz(city_name, lat, lng);
+        return({"name": city_name, "tz": "", "lat": lat, "lng": lng, "clocks": []});
+    }
+
+    async function gettz(city_name, lat, lng) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `https://maps.googleapis.com/maps/api/timezone/json?location=`+lat+`,`+lng+`&timestamp=1331766000&key=AIzaSyDCeegcKpE4NsNKrsUFx38ycOuwXwNQ2NM`);
+        xhr.send();
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var cityIndex = cities_showing_tzs.findIndex(a => ((a.name === city_name) && (a.lat === lat) && (a.lng === lng)));
+            cities_showing_tzs[cityIndex].tz = JSON.parse(xhr.response).timeZoneId;
+            return(JSON.parse(xhr.response).timeZoneId);
+          } else {
+            console.log("promise rejected")
+            return("uhoh")
+          }
+        };
+      };
 
     function datepickerArrowClicked(direction) {
         let new_basetime = 0;
@@ -88,11 +127,6 @@
     let nb_clocks = 0;
     let datepicker_divs_count = 0;
     let datepicker_divs_width = 0;
-
-    function getTimezoneName(city_name) {
-        var index_in_all_city_list =  groups[2].city_names.indexOf(city_name);
-        return groups[2].city_timezones[index_in_all_city_list];
-    }
 
     function getClockArray(clock_basetime) {
         let clock_array = [];
@@ -139,23 +173,19 @@
 
     function updateTzs(new_basetime) {
         console.log("updateTzs");
-
         if(typeof new_basetime === "undefined") {
             basetime = moment();
         } else {
             basetime = new_basetime
         }
-        let tzs = [];
-        let tz_clocks_buf = [];
         let reference_tz = 0;
 
-        for (var i = 0; i <= groups[1].city_names.length - 1; i++) {
+        for (var i = 0; i <= cities_showing_tzs.length - 1; i++) {
             if (i == 0) {
                 // first element is the "reference timezone"
-                console.log(groups[1])
-                reference_tz = basetime.tz(getTimezoneName(groups[1].city_names[i])).utcOffset();
+                reference_tz = basetime.tz(cities_showing_tzs[i].tz).utcOffset();
             }
-            var local_time = moment(basetime.format()).tz(getTimezoneName(groups[1].city_names[i]));
+            var local_time = moment(basetime.format()).tz(cities_showing_tzs[i].tz);
             var local_offset = local_time.utcOffset();
             var local_time_str = local_time.format();
             var offset_difference = (reference_tz - local_offset)/60
@@ -164,88 +194,57 @@
             } else {
                 var offset_difference_str = "+" + offset_difference.toString();
             }
-            tzs.push(offset_difference_str + ": " + local_time_str);
-            tz_clocks_buf = tz_clocks_buf.concat([getClockArray(local_time)]);
+            cities_showing_tzs[i].clocks = getClockArray(local_time);
+            localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
+
         }
-        tz_clocks = tz_clocks_buf;
-    }
-
-    function dragstart (ev, group, item) {
-        ev.dataTransfer.setData("group", group);
-        ev.dataTransfer.setData("item", item);
-    }
-
-    function dragover (ev) {
-        ev.preventDefault();
-        ev.dataTransfer.dropEffect = 'move';
-    }
-
-    function drop (ev, new_g) {
-        ev.preventDefault();
-        var i = ev.dataTransfer.getData("item");
-        var old_g = ev.dataTransfer.getData("group");
-        const city_name = groups[old_g].city_names.splice(i,1)[0];
-        console.log("city_name:")
-        console.log(city_name)
-        groups[new_g].city_names.push(city_name);
-        groups[new_g].city_names.sort();
-        updateTzs(basetime);
     }
 
     function handleClick (ev, new_g) {
         ev.preventDefault();
         console.log("handleClick")
-        var i = ev.target.attributes.city_name_row.value;
-        var old_g = ev.target.attributes.group.value;
-        if ((old_g == 1) && groups[1].city_names.length == 1) {
-          console.log("Prevent user from having 0 cities selected")
-          return
+        var status = ev.target.attributes.status.value;
+        if (status == "active") {
+          console.log("active");
+          console.log({"name": ev.target.attributes.city_name.value, "tz": ev.target.attributes.tz.value});
+          cities_showing_tzs = cities_showing_tzs.filter(a => ((a.name !== ev.target.attributes.city_name.value) || (a.tz !== ev.target.attributes.tz.value)));
+          cities_hiding_tzs = [...cities_hiding_tzs, {"name": ev.target.attributes.city_name.value, "tz":  ev.target.attributes.tz.value}];
+        } else {
+          console.log("inactive");
+          console.log({"name": ev.target.attributes.city_name.value, "tz": ev.target.attributes.tz.value});
+          cities_hiding_tzs = cities_hiding_tzs.filter(a => ((a.name !== ev.target.attributes.city_name.value) || (a.tz !== ev.target.attributes.tz.value)));
+          cities_showing_tzs = [...cities_showing_tzs, {"name": ev.target.attributes.city_name.value, "tz":  ev.target.attributes.tz.value}];
         }
-        const city_name = groups[old_g].city_names.splice(i,1)[0];
-        groups[new_g].city_names.push(city_name);
-        groups[new_g].city_names.sort();
-        search_box.value="";
-        localStorage.setItem("lastCitiesSelected", JSON.stringify(groups[1]))
-        setSearchBoxData();
+        cities_hiding_tzs.sort((a, b) => {
+          if (a.name > b.name) return 1;
+          if (a.name < b.name) return -1;
+        })
+        cities_showing_tzs.sort((a, b) => {
+          if (a.name > b.name) return 1;
+          if (a.name < b.name) return -1;
+        })
+        console.log(cities_showing_tzs)
+        console.log(cities_hiding_tzs)
+        console.log("saving to local store")
+        localStorage.setItem("lastCitiesSelected", JSON.stringify(cities_showing_tzs))
         updateTzs(basetime);
         setTimeout(defaultHighlighting,50);
     }
 
     function setDefaultViewData() {
-      let cities_to_show = ['Berlin','Buenos Aires', 'Riga', 'Sydney'];
-      let cities_selected = "";
+      let loaded_cities = "";
 
         if (localStorage.getItem("lastCitiesSelected")) {
-          cities_selected = JSON.parse(localStorage.getItem("lastCitiesSelected"))["city_names"];
+          loaded_cities = JSON.parse(localStorage.getItem("lastCitiesSelected"));
           console.log("loading from local")
-
-          for (var i = 0; i <= cities_selected.length - 1; i++) {
-              groups[1].city_names.push(cities_selected[i]);
+          console.log(loaded_cities)
+          cities_showing_tzs = loaded_cities
+          for (var i = 0; i <= loaded_cities.length - 1; i++) {
+              console.log(loaded_cities[i])
           }
         } else {
           console.log("no local")
-          groups[1].city_names = ["Berlin"];
-          console.log(Array.isArray(groups[1].city_names));
         }
-
-        for (var i = 0; i <= cities_to_show.length - 1; i++) {
-            if (!cityIsAlreadyOnPage(cities_to_show[i])) {
-                // this is not already shown in the timezone list, so it can be added to the search_box list
-                groups[0].city_names.push(cities_to_show[i]);
-            }
-        }
-    }
-
-    function setSearchBoxData() {
-        console.log("setSearchBoxData");
-        var city_names = [];
-        for (var i = 0; i <= groups[2].city_names.length - 1; i++) {
-            if (!cityIsAlreadyOnPage(groups[2].city_names[i])) {
-                // this is not already shown in the timezone list, so it can be added to the search_box list
-                city_names.push(groups[2].city_names[i]);
-            }
-        }
-        groups[3].city_names = city_names;
     }
 
     function getViewportSize() {
@@ -268,41 +267,14 @@
         updateTzs();
         defaultHighlighting();
     }
-    jQuery(window).on('resize', windowResize);
-
 
     //// Dropdown menu search_box thing
     //Find every item inside the dropdown
     let items = document.getElementsByClassName("dropdown-item")
 
     function cityIsAlreadyOnPage(city_name) {
-        if ((groups[1].city_names.includes(city_name)) || (groups[0].city_names.includes(city_name))) {
-            return true;
-        }
-        return false;
+      return false;
     }
-
-    //For every word entered by the user, check if the symbol starts with that word
-    //If it does show the symbol, else hide it
-    function filterCityDropdown(word) {
-        let collection = []
-        let hidden = 0
-        var city_names = [];
-
-        for (let i = 0; i < groups[2].city_names.length; i++) {
-            if (groups[2].city_names[i].toLowerCase().startsWith(word)) {
-                if (!cityIsAlreadyOnPage(groups[2].city_names[i])) {
-                    city_names.push(groups[2].city_names[i]);
-                }
-            }
-        }
-        groups[3].city_names = city_names;
-    }
-
-    //If the user clicks on any item, hide the menu
-    jQuery('#menuItems').on('click', '.dropdown-item', function(){
-        jQuery("#dropdown_coins").dropdown('toggle');
-    })
 
 
 </script>
@@ -413,6 +385,8 @@
     }
 
 </style>
+
+
 <div class="container">
     <table class="table datepicker_table" style:line-height:10vh>
         <tbody>
@@ -425,14 +399,14 @@
     </table>
     <table class="table city_table" style:line-height:10vh>
         <tbody>
-          {#if Array.isArray(groups[1].city_names)}
-              {#each groups[1].city_names as city_name,i}
-                  <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
-                      <td class="city_name_active" city_name_row={i} group=1 draggable={true} on:dragstart={event => dragstart(event, 1, i)}  on:click={event => handleClick(event, 0)}>
-                          { city_name }
+          {#if Array.isArray(cities_showing_tzs)}
+              {#each cities_showing_tzs as cityobj,i}
+                  <tr class="city_row">
+                      <td class="city_name_active" city_name={cityobj.name} tz={cityobj.tz} status="active"  city_name_row={i} draggable={true}  on:click={event => handleClick(event, 0)}>
+                        { cityobj.name }
                       </td>
-                      {#if Array.isArray(tz_clocks[i])}
-                        {#each tz_clocks[i] as cl,j}
+                      {#if Array.isArray(cityobj.clocks)}
+                        {#each cityobj.clocks as cl,j}
                             <td class="timezone_clock col_{j} clock_cell" style="width: {datepicker_divs_width}" on:mouseenter={event => hoverCol(j)} on:mouseleave={event => unHoverCol(j)} on:click={event => updateBasetime(j, i)}>
                                 {cl}:00
                             </td>
@@ -440,38 +414,22 @@
                       {/if}
                   </tr>
               {/each}
-          {/if}
-          {#if Array.isArray(groups[0].city_names)}
-            {#each groups[0].city_names as city_name,i}
-            <tr class="city_row" on:drop={event => drop(event, 1)} on:dragover={dragover}>
-            <td class="city_name_inactive" city_name_row={i} group=0 draggable={true} on:dragstart={event => dragstart(event, 0, i)} on:drop={event => drop(event, 0)} on:click={event => handleClick(event, 1)} on:dragover={dragover}>
-                {city_name}
-            </td>
-            </tr>
-            {/each}
-          {/if}
 
-<tr></tr>
-            <tr class="city_row city_search_row">
-                <td>
-                    <Dropdown isOpen={isDropdownOpen} toggle={() => (isDropdownOpen = !isDropdownOpen)}>
-                        <input type="search_box" class="form-control search_box" id="city_search_box_box" placeholder="Search City" on:click={() => (isDropdownOpen = !isDropdownOpen)}>
-                        <DropdownMenu style="max-height: 40vh; overflow:scroll;">
-                          {#if Array.isArray(groups[3].city_names)}
-                              {#each groups[3].city_names as menu_item,i}
-                                  <DropdownItem city_name_row={i} group=3 on:click={event => handleClick(event, 1)}>{menu_item}</DropdownItem>
-                              {/each}
-                            {/if}
-                        </DropdownMenu>
-                    </Dropdown>
-                </td>
-                {#if tz_clocks.length > 0}
-                  {#each tz_clocks[0] as clock,i}
-                      <td></td>
-                  {/each}
-                {/if}
-            </tr>
-            <tr></tr>
+          {/if}
+          {#if Array.isArray(cities_hiding_tzs)}
+              {#each cities_hiding_tzs as cityobj,i}
+                  <tr class="city_row">
+                      <td class="city_name_inactive" city_name={cityobj.name} tz={cityobj.tz} status="inactive"  city_name_row={i} draggable={true}  on:click={event => handleClick(event, 0)}>
+                          { cityobj.name }
+                      </td>
+                  </tr>
+              {/each}
+          {/if}
+          <tr>
+            <td colspan = "{nb_clocks +1}">
+              <input type="search" id="address-input" placeholder="City search" />
+            </td>
+          </tr>
         </tbody>
     </table>
 </div>
