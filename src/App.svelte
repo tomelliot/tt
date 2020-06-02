@@ -21,11 +21,12 @@
 
     var cities_showing_tzs = [
       {"name": "Berlin", "tz": "Europe/Berlin", "lat": 52.517, "lng": 13.3889},
-      {"name": "Hamburg", "tz": "Europe/Berlin", "lat": 53.5503, "lng": 10.0007},
+      {"name": "Sydney", "tz": "Australia/Sydney", "lat": -33.8549, "lng": 151.216},
     ];
 
     var cities_hiding_tzs = [
-      {"name": "Sydney", "tz": "Australia/Sydney", "lat": -33.8549, "lng": 151.216},
+      {"name": "San Francisco", "tz": "America/Los_Angeles", "lat": -37.8142, "lng": 144.963},
+      {"name": "Lisbon", "tz": "Europe/Lisbon", "lat": 38.7078, "lng": -9.13659},
       {"name": "Melbourne", "tz": "Australia/Sydney", "lat": -37.8142, "lng": 144.963},
     ];
 
@@ -43,7 +44,7 @@
       var city_name = e.suggestion.name
       var {lat, lng} = e.suggestion.latlng
       var new_city_data = await getNewCity(city_name, lat, lng);
-      new_city_data = new_city_data;
+      console.log(new_city_data)
       cities_showing_tzs = [...cities_showing_tzs, new_city_data];
       window.setTimeout(updateTzs, 200);
       localStorage.setItem("previousCitiesShown", JSON.stringify(cities_showing_tzs))
@@ -206,13 +207,17 @@
         if (status == "active") {
           console.log("active");
           console.log({"name": ev.target.attributes.city_name.value, "tz": ev.target.attributes.tz.value});
-          cities_showing_tzs = cities_showing_tzs.filter(a => ((a.name !== ev.target.attributes.city_name.value) || (a.tz !== ev.target.attributes.tz.value)));
-          cities_hiding_tzs = [...cities_hiding_tzs, {"name": ev.target.attributes.city_name.value, "tz":  ev.target.attributes.tz.value}];
+          var cityIndex = cities_showing_tzs.findIndex(a => ((a.name === ev.target.attributes.city_name.value) && (a.tz === ev.target.attributes.tz.value)));
+          cities_hiding_tzs = [...cities_hiding_tzs, cities_showing_tzs[cityIndex]];
+          cities_showing_tzs.splice(cityIndex,1)
+          cities_showing_tzs = cities_showing_tzs;
         } else {
           console.log("inactive");
           console.log({"name": ev.target.attributes.city_name.value, "tz": ev.target.attributes.tz.value});
-          cities_hiding_tzs = cities_hiding_tzs.filter(a => ((a.name !== ev.target.attributes.city_name.value) || (a.tz !== ev.target.attributes.tz.value)));
-          cities_showing_tzs = [...cities_showing_tzs, {"name": ev.target.attributes.city_name.value, "tz":  ev.target.attributes.tz.value}];
+          var cityIndex = cities_hiding_tzs.findIndex(a => ((a.name === ev.target.attributes.city_name.value) && (a.tz === ev.target.attributes.tz.value)));
+          cities_showing_tzs = [...cities_showing_tzs, cities_hiding_tzs[cityIndex]];
+          cities_hiding_tzs.splice(cityIndex,1)
+          cities_hiding_tzs = cities_hiding_tzs;
         }
         cities_hiding_tzs.sort((a, b) => {
           if (a.name > b.name) return 1;
@@ -232,17 +237,19 @@
 
     function setDefaultViewData() {
       let loaded_cities = "";
-
         if (localStorage.getItem("previousCitiesShown")) {
           loaded_cities = JSON.parse(localStorage.getItem("previousCitiesShown"));
           console.log("loading from local")
-          console.log(loaded_cities)
           cities_showing_tzs = loaded_cities
-          for (var i = 0; i <= loaded_cities.length - 1; i++) {
-              console.log(loaded_cities[i])
+          for (var i = 0; i <= cities_showing_tzs.length - 1; i++) {
+              var cityIndex = cities_hiding_tzs.findIndex(a => ((a.name === cities_showing_tzs[i].name) && (a.tz === cities_showing_tzs[i].tz)));
+              if (cityIndex >= 0) {
+                cities_hiding_tzs.splice(cityIndex,1)
+                cities_hiding_tzs = cities_hiding_tzs;
+              }
           }
         } else {
-          console.log("no local")
+          console.log("no local storage found")
         }
     }
 
