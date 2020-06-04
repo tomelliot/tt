@@ -139,7 +139,13 @@
     };
 
     function updateBasetime(clock, tz_row) {
-        var new_basetime = basetime.add(tz_clocks[0][clock]-basetime.hours(),"hours");
+        var new_basetime = basetime.add(cities_showing_tzs[0].clocks[clock]-basetime.hours(),"hours");
+        console.log("----------------")
+        console.log(clock)
+        console.log(tz_row)
+        console.log(cities_showing_tzs[tz_row].clocks[clock])
+        console.log(cities_showing_tzs)
+        console.log("----------------")
         updateTzs(new_basetime);
     };
 
